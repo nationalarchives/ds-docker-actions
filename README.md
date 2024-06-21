@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker image
-        uses: nationalarchives/ds-docker-actions/.github/actions/docker-build
+        uses: nationalarchives/ds-docker-actions/.github/actions/docker-build@main
         with:
           version: 0.1.0
           latest: false
@@ -43,9 +43,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Create version tag
         id: version-tag
-        uses: nationalarchives/ds-docker-actions/.github/actions/get-version-tag
+        uses: nationalarchives/ds-docker-actions/.github/actions/get-version-tag@main
       - name: Build Docker image
-        uses: nationalarchives/ds-docker-actions/.github/actions/docker-build
+        uses: nationalarchives/ds-docker-actions/.github/actions/docker-build@main
         with:
           version: ${{ steps.version-tag.outputs.version-tag }}
           latest: ${{ github.ref == 'refs/heads/main' }}
@@ -68,9 +68,9 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
       - name: Remove untagged Docker images
-        uses: nationalarchives/ds-docker-actions/.github/actions/remove-untagged
+        uses: nationalarchives/ds-docker-actions/.github/actions/remove-untagged@main
         with:
           docker-image-name: my-application
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```

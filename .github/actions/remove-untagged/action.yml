@@ -4,6 +4,9 @@ inputs:
   docker-image-name:
     required: true
     type: string
+  github-token:
+    required: true
+    type: string
 
 runs:
   using: "composite"
@@ -11,7 +14,7 @@ runs:
     - name: Delete untagged images
       uses: actions/github-script@v7.0.1
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github-token }}
         script: |
           const response = await github.request("GET /orgs/${{ github.repository_owner }}/packages/container/${{ inputs.docker-image-name }}/versions", {
               per_page: 100
