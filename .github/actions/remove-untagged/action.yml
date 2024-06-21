@@ -27,4 +27,3 @@ runs:
                   console.log("status " + deleteResponse.status)
               }
           }
-      shell: bash
