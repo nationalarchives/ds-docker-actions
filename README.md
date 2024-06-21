@@ -36,8 +36,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    needs:
-      - version
     permissions:
       packages: write
       contents: read
