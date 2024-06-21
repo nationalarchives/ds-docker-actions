@@ -1,5 +1,12 @@
 # Docker build GitHub actions
 
+Build, lint and maintain Docker images with consistent labelling.
+
+Used by:
+
+- [ds-etna-frontend](https://github.com/nationalarchives/ds-etna-frontend)
+- [ds-etna-search](https://github.com/nationalarchives/ds-etna-search)
+
 ## Build a Docker image
 
 ```yml
