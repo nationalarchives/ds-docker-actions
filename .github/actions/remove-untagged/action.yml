@@ -1,7 +1,7 @@
-name: Remove untagged container images
+name: Remove untagged Docker images
 
 inputs:
-  image-name:
+  docker-image-name:
     required: true
     type: string
 
@@ -13,14 +13,14 @@ runs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const response = await github.request("GET /orgs/${{ github.repository_owner }}/packages/container/${{ inputs.image-name }}/versions", {
+          const response = await github.request("GET /orgs/${{ github.repository_owner }}/packages/container/${{ inputs.docker-image-name }}/versions", {
               per_page: 100
           });
           for(version of response.data) {
               if (version.metadata.container.tags.length == 0 && version.name !== "latest" && version.name !== "preview") {
                   console.log("Delete " + version.id)
 
-                  const deleteResponse = await github.request("DELETE /orgs/${{ github.repository_owner }}/packages/container/${{ inputs.image-name }}/versions/" + version.id, { });
+                  const deleteResponse = await github.request("DELETE /orgs/${{ github.repository_owner }}/packages/container/${{ inputs.docker-image-name }}/versions/" + version.id, { });
                   console.log("status " + deleteResponse.status)
               }
           }

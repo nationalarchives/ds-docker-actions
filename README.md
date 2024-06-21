@@ -52,3 +52,25 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           docker-image-name: my-application
 ```
+
+## Remove untagged Docker images
+
+```yml
+name: Remove untagged Docker images
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove untagged Docker images
+        uses: nationalarchives/ds-docker-actions/.github/actions/remove-untagged
+        with:
+          docker-image-name: my-application
+```
