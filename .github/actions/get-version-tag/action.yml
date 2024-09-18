@@ -26,6 +26,10 @@ runs:
 
         CALVER=$(date +%y.%m.%d).${{ github.run_number }}
         echo "Calver:                       $CALVER"
+        CALVER_ALT_1=$(date +%y.%m.%d).$(git rev-list HEAD --count)
+        echo "Calver alt 1:                 $CALVER_ALT_1"
+        CALVER_ALT_2=$(git log -1 --date=format:"%y.%m.%d" --format="%ad").$(git rev-list HEAD --count)
+        echo "Calver alt 2:                 $CALVER_ALT_2"
         [ "$VERSION" == "main" ] && VERSION=$CALVER
         echo "Final version:                $VERSION"
 
