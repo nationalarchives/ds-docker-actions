@@ -8,8 +8,8 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: version-tag
-      name: Get tag from branch, tag or release
+    - name: Get tag from branch, tag or release
+      id: version-tag
       run: |
         echo "github.ref:                   ${{ github.ref }}"
         echo "github.ref_name:              ${{ github.ref_name }}"
