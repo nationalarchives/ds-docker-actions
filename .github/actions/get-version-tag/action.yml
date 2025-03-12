@@ -15,8 +15,6 @@ runs:
         echo "github.ref_name:              ${{ github.ref_name }}"
         echo "github.event.ref:             ${{ github.event.ref }}"
 
-        # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
         VERSION=$(echo "${{ github.ref_name }}" | sed -e 's,/,-,g')
         echo "Basic version:                $VERSION"
 
@@ -25,13 +23,7 @@ runs:
         echo "Tag version without v prefix: $VERSION"
 
         CALVER=$(date +%y.%m.%d).${{ github.run_number }}
-        echo "Calver:                       $CALVER"
-        CALVER_ALT_1=$(date +%y.%m.%d).$(git rev-list HEAD --count)
-        echo "Calver alt 1:                 $CALVER_ALT_1"
-        CALVER_ALT_2=$(git log -1 --date=format:"%y.%m.%d" --format="%ad").$(git rev-list HEAD --count)
-        echo "Calver alt 2:                 $CALVER_ALT_2"
         [ "$VERSION" == "main" ] && VERSION=$CALVER
-        echo "Final version:                $VERSION"
-
+        echo "Version:                      $VERSION"
         echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
       shell: bash
