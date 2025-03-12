@@ -21,7 +21,7 @@ runs:
     - uses: actions/checkout@v4
 
     - name: Log in to registry
-      run: gh auth token | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      run: gh auth token | docker login ghcr.io --username $(gh api user --jq '.login') --password-stdin
       shell: bash
 
     - name: Download Wiz CLI
