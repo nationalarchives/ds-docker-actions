@@ -57,7 +57,7 @@ runs:
         ignore: DL3045,DL3007
 
     - name: Scan DockerFile
-      run: ./wizcli iac scan --name ${{ env.IMAGE_NAME }} --path . --type dockerfile
+      run: ./wizcli iac scan --name ${{ env.IMAGE_NAME }} --path . --types Dockerfile
       shell: bash
 
     - name: Build and push image
