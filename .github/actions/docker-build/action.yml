@@ -74,5 +74,5 @@ runs:
       shell: bash
 
     - name: Wiz Docker scan
-      run: ./wizcli docker scan --image ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+      run: ./wizcli docker scan --image ${{ env.IMAGE_NAME }}:${{ inputs.version }} --driver mountWithLayers
       shell: bash
