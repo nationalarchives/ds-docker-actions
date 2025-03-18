@@ -14,31 +14,65 @@ inputs:
   docker-image-name:
     required: true
     type: string
+  wiz-client-id:
+    required: true
+    type: string
+  wiz-client-secret:
+    required: true
+    type: string
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v4
+
     - name: Log in to registry
       run: echo "${{ inputs.github-token }}" | docker login ghcr.io -u $ --password-stdin
       shell: bash
-    - uses: hadolint/hadolint-action@v3.1.0
+
+    - name: Download Wiz CLI
+      run: |
+        echo "36036693d213b125f25a65a90baaa9e7f1e4f335ec592cf3ba8ee1bf59815515  wizcli" > checksum.txt
+        curl -o wizcli https://wizcli.app.wiz.io/wizcli
+        shasum -a 256 -c checksum.txt
+        chmod +x wizcli
+      shell: bash
+
+    - name: Authenticate Wiz API
+      run: ./wizcli auth --id ${{ inputs.wiz-client-id }} --secret ${{ inputs.wiz-client-secret }}
+      shell: bash
+
+    - name: Set up Docker image name
+      id: docker-image-name
+      run: |
+        IMAGE_NAME=$(echo "ghcr.io/${{ github.repository_owner }}/${{ inputs.docker-image-name }}" | tr '[A-Z]' '[a-z]')
+        echo $IMAGE_NAME
+        echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Lint Dockerfile
+      uses: hadolint/hadolint-action@v3.1.0
       with:
         dockerfile: Dockerfile
         ignore: DL3045,DL3007
+
+    - name: Scan DockerFile
+      run: ./wizcli iac scan --name ${{ env.IMAGE_NAME }} --path . --types Dockerfile
+      shell: bash
+
     - name: Build and push image
       run: |
-        IMAGE_ID=$(echo "ghcr.io/${{ github.repository_owner }}/${{ inputs.docker-image-name }}" | tr '[A-Z]' '[a-z]')
-        echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_OUTPUT"
-        echo $IMAGE_ID
-        docker build --tag $IMAGE_ID:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --platform linux/amd64 --no-cache .
-        docker push $IMAGE_ID:${{ inputs.version }}
+        docker build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --platform linux/amd64 --no-cache .
+        docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
       shell: bash
+
     - name: Tag latest
       if: ${{ inputs.latest == 'true' }}
       run: |
-        IMAGE_ID=$(echo "ghcr.io/${{ github.repository_owner }}/${{ inputs.docker-image-name }}" | tr '[A-Z]' '[a-z]')
-        echo $IMAGE_ID
-        docker tag $IMAGE_ID:${{ inputs.version }} $IMAGE_ID:latest
-        docker push $IMAGE_ID:latest
+        docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
+        docker push ${{ env.IMAGE_NAME }}:latest
+      shell: bash
+
+    - name: Wiz Docker scan
+      run: ./wizcli docker scan --image ${{ env.IMAGE_NAME }}:${{ inputs.version }}
       shell: bash
