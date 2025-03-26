@@ -35,7 +35,7 @@ runs:
 
     - name: Download Wiz CLI
       run: |
-        echo "36036693d213b125f25a65a90baaa9e7f1e4f335ec592cf3ba8ee1bf59815515  wizcli" > checksum.txt
+        echo "b47c1a9a738bc73ad2295712670c7e9f0c18fd453b4551bd3159b26536391700  wizcli" > checksum.txt
         curl -o wizcli https://wizcli.app.wiz.io/wizcli
         sha256sum wizcli
         shasum -a 256 -c checksum.txt
