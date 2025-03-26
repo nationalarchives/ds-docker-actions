@@ -37,7 +37,7 @@ runs:
       run: |
         echo "36036693d213b125f25a65a90baaa9e7f1e4f335ec592cf3ba8ee1bf59815515  wizcli" > checksum.txt
         curl -o wizcli https://wizcli.app.wiz.io/wizcli
-        sha256 wizcli
+        sha256sum wizcli
         shasum -a 256 -c checksum.txt
         chmod +x wizcli
       shell: bash
