@@ -20,6 +20,9 @@ inputs:
   wiz-client-secret:
     required: true
     type: string
+  wiz-project-id:
+    required: true
+    type: string
 
 runs:
   using: "composite"
@@ -57,7 +60,7 @@ runs:
         ignore: DL3045,DL3007
 
     - name: Scan DockerFile
-      run: ./wizcli iac scan --name ${{ env.IMAGE_NAME }} --path . --types Dockerfile
+      run: ./wizcli iac scan --name ${{ env.IMAGE_NAME }} --path . --types Dockerfile --project ${{ inputs.wiz-project-id }}
       shell: bash
 
     - name: Build and push image
@@ -74,5 +77,7 @@ runs:
       shell: bash
 
     - name: Wiz Docker scan
-      run: ./wizcli docker scan --image ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+      run: |
+        ./wizcli docker scan --image ${{ env.IMAGE_NAME }}:${{ inputs.version }} --dockerfile Dockerfile --project ${{ inputs.wiz-project-id }}
+        ./wizcli docker tag --image ${{ env.IMAGE_NAME }}:${{ inputs.version }}
       shell: bash
