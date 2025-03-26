@@ -40,6 +40,7 @@ runs:
         sha256sum wizcli
         shasum -a 256 -c checksum.txt
         chmod +x wizcli
+        ./wizcli version
       shell: bash
 
     - name: Authenticate Wiz API
