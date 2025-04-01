@@ -35,10 +35,23 @@ runs:
 
     - name: Download Wiz CLI
       run: |
-        # echo "23850d57a423e9a30b9498c9fa5be23335686143e721f37e55bb52ed63988d1c  wizcli" > checksum.txt
-        curl -o wizcli https://wizcli.app.wiz.io/wizcli
-        # sha256sum wizcli
-        # shasum -a 256 -c checksum.txt
+        curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
+
+        # Import the public key
+        curl -Lo public_key.asc https://downloads.wiz.io/wizcli/public_key.asc
+        gpg --import public_key.asc
+        # (OR) Ubuntu's Keyserver
+        # gpg --keyserver keyserver.ubuntu.com --recv-keys CE4AE4BAD12EE02C
+
+        # Download files to perform signature verification
+        curl -Lo /tmp/wizcli-sha256 https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64-sha256
+        curl -Lo /tmp/wizcli-sha256.sig https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64-sha256.sig
+
+        # Verify signature
+        gpg --verify /tmp/wizcli-sha256.sig /tmp/wizcli-sha256
+
+        # Verify SHA256
+        echo "$(cat /tmp/wizcli-sha256) wizcli" | sha256sum --check
         chmod +x wizcli
         ./wizcli version
       shell: bash
