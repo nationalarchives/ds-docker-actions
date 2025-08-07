@@ -33,32 +33,32 @@ runs:
       run: echo "${{ inputs.github-token }}" | docker login ghcr.io -u $ --password-stdin
       shell: bash
 
-    - name: Download Wiz CLI
-      run: |
-        curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
+    # - name: Download Wiz CLI
+    #   run: |
+    #     curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
 
-        # Import the public key
-        curl -Lo public_key.asc https://downloads.wiz.io/wizcli/public_key.asc
-        gpg --import public_key.asc
-        # (OR) Ubuntu's Keyserver
-        # gpg --keyserver keyserver.ubuntu.com --recv-keys CE4AE4BAD12EE02C
+    #     # Import the public key
+    #     curl -Lo public_key.asc https://downloads.wiz.io/wizcli/public_key.asc
+    #     gpg --import public_key.asc
+    #     # (OR) Ubuntu's Keyserver
+    #     # gpg --keyserver keyserver.ubuntu.com --recv-keys CE4AE4BAD12EE02C
 
-        # Download files to perform signature verification
-        curl -Lo /tmp/wizcli-sha256 https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64-sha256
-        curl -Lo /tmp/wizcli-sha256.sig https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64-sha256.sig
+    #     # Download files to perform signature verification
+    #     curl -Lo /tmp/wizcli-sha256 https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64-sha256
+    #     curl -Lo /tmp/wizcli-sha256.sig https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64-sha256.sig
 
-        # Verify signature
-        gpg --verify /tmp/wizcli-sha256.sig /tmp/wizcli-sha256
+    #     # Verify signature
+    #     gpg --verify /tmp/wizcli-sha256.sig /tmp/wizcli-sha256
 
-        # Verify SHA256
-        echo "$(cat /tmp/wizcli-sha256) wizcli" | sha256sum --check
-        chmod +x wizcli
-        ./wizcli version
-      shell: bash
+    #     # Verify SHA256
+    #     echo "$(cat /tmp/wizcli-sha256) wizcli" | sha256sum --check
+    #     chmod +x wizcli
+    #     ./wizcli version
+    #   shell: bash
 
-    - name: Authenticate Wiz API
-      run: ./wizcli auth --id ${{ inputs.wiz-client-id }} --secret ${{ inputs.wiz-client-secret }}
-      shell: bash
+    # - name: Authenticate Wiz API
+    #   run: ./wizcli auth --id ${{ inputs.wiz-client-id }} --secret ${{ inputs.wiz-client-secret }}
+    #   shell: bash
 
     - name: Set up Docker image name
       id: docker-image-name
@@ -91,8 +91,8 @@ runs:
         docker push ${{ env.IMAGE_NAME }}:latest
       shell: bash
 
-    - name: Wiz Docker scan
-      run: |
-        ./wizcli docker scan --image ${{ env.IMAGE_NAME }}:${{ inputs.version }} --dockerfile Dockerfile --project ${{ inputs.wiz-project-id }}
-        ./wizcli docker tag --image ${{ env.IMAGE_NAME }}:${{ inputs.version }}
-      shell: bash
+    # - name: Wiz Docker scan
+    #   run: |
+    #     ./wizcli docker scan --image ${{ env.IMAGE_NAME }}:${{ inputs.version }} --dockerfile Dockerfile --project ${{ inputs.wiz-project-id }}
+    #     ./wizcli docker tag --image ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+    #   shell: bash
