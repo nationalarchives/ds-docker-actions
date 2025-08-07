@@ -34,7 +34,7 @@ runs:
       shell: bash
 
     - name: Set up Wiz
-      uses: ./.github/actions/setup-wiz
+      uses: nationalarchives/ds-docker-actions/.github/actions/setup-wiz@main
       with:
         wiz-client-id: ${{ inputs.wiz-client-id }}
         wiz-client-secret: ${{ inputs.wiz-client-secret }}
@@ -48,14 +48,14 @@ runs:
       shell: bash
 
     - name: Lint Dockerfile
-      uses: ./.github/actions/lint
+      uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
       with:
         dockerfile-path: .
         ignore-linting-rules: DL3045,DL3007
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Scan Dockerfile
-      uses: ./.github/actions/scan-dockerfile
+      uses: nationalarchives/ds-docker-actions/.github/actions/scan-dockerfile@main
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
@@ -76,7 +76,7 @@ runs:
       shell: bash
 
     - name: Scan container
-      uses: ./.github/actions/scan-container
+      uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
