@@ -68,7 +68,7 @@ name: Remove untagged Docker images
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 3 * * 1"  # 03:00 every Monday
+    - cron: "0 3 * * 1" # 03:00 every Monday
 
 jobs:
   build:

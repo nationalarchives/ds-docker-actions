@@ -1,0 +1,36 @@
+name: Scan Docker image
+
+inputs:
+  image-id:
+    required: true
+    type: string
+  image-tag:
+    required: true
+    type: string
+  wiz-project-id:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    # - name: Scan for vulnerabilities
+    #   uses: aquasecurity/trivy-action@0.28.0
+    #   with:
+    #     image-ref: ${{ inputs.image-id }}:${{ inputs.image-tag }}
+    #     format: "sarif"
+    #     output: "trivy-results.sarif"
+    #     ignore-unfixed: true
+
+    # - name: Upload Trivy scan results to GitHub Security tab
+    #   uses: github/codeql-action/upload-sarif@v3
+    #   with:
+    #     sarif_file: "trivy-results.sarif"
+
+    - name: Scan image with Wiz
+      if: ${{ env.DISABLE_WIZ != 'true' }}
+      run: |
+        docker pull ${{ inputs.image-id }}:${{ inputs.image-tag }}
+        ./wizcli docker scan --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --project ${{ inputs.wiz-project-id }}
+        ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }}
+      shell: bash
