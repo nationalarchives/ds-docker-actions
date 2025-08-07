@@ -26,10 +26,12 @@ inputs:
 
 runs:
   using: "composite"
-  env:
-    DISABLE_WIZ: true  # TODO: Remove this when Wiz is fixed
   steps:
     - uses: actions/checkout@v4
+
+    - name: Temporary workaround for Wiz  # TODO: Remove this when Wiz is fixed
+      run: echo "DISABLE_WIZ=true" >> $GITHUB_ENV
+      shell: bash
 
     - name: Log in to registry
       run: echo "${{ inputs.github-token }}" | docker login ghcr.io -u $ --password-stdin
