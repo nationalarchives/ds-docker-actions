@@ -2,12 +2,7 @@
 
 Build, lint and maintain Docker images with consistent labelling.
 
-Used by:
-
-- [ds-etna-frontend](https://github.com/nationalarchives/ds-etna-frontend)
-- [ds-etna-search](https://github.com/nationalarchives/ds-etna-search)
-
-## Build a Docker image
+## Simple example
 
 ```yml
 name: Build Docker image
@@ -23,63 +18,79 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+
       - name: Build Docker image
-        uses: nationalarchives/ds-docker-actions/.github/actions/docker-build@main
+        uses: nationalarchives/ds-docker-actions/.github/actions/build@main
         with:
           version: 0.1.0
           latest: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
           docker-image-name: my-application
+          wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
+          wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
+          wiz-project-id: ${{ secrets.WIZ_PROJECT_ID }}
 ```
 
 ## Build a Docker image with a generated version number
 
 ```yml
-name: Build Docker image
+- name: Create version tag
+  id: version-tag
+  uses: nationalarchives/ds-docker-actions/.github/actions/get-version-tag@main
 
-on:
-  push:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - name: Create version tag
-        id: version-tag
-        uses: nationalarchives/ds-docker-actions/.github/actions/get-version-tag@main
-      - name: Build Docker image
-        uses: nationalarchives/ds-docker-actions/.github/actions/docker-build@main
-        with:
-          version: ${{ steps.version-tag.outputs.version-tag }}
-          latest: ${{ github.ref == 'refs/heads/main' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          docker-image-name: my-application
+- name: Build Docker image
+  uses: nationalarchives/ds-docker-actions/.github/actions/build@main
+  with:
+    version: ${{ steps.version-tag.outputs.version-tag }}
+    latest: ${{ github.ref == 'refs/heads/main' }}
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    docker-image-name: my-application
+    wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
+    wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
+    wiz-project-id: ${{ secrets.WIZ_PROJECT_ID }}
 ```
 
-## Remove untagged Docker images
+## Lint a `Dockerfile`
 
 ```yml
-name: Remove untagged Docker images
+- name: Lint Dockerfile
+  uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
+  with:
+    dockerfile-path: .
+    ignore-linting-rules: DL3045,DL3007
+```
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 3 * * 1" # 03:00 every Monday
+## Working with Wiz
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - name: Remove untagged Docker images
-        uses: nationalarchives/ds-docker-actions/.github/actions/remove-untagged@main
-        with:
-          docker-image-name: my-application
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+### Set up and configure Wiz
+
+```yml
+- name: Set up Wiz
+  uses: nationalarchives/ds-docker-actions/.github/actions/setup-wiz@main
+  with:
+    wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
+    wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
+```
+
+### Scan a `Dockerfile`
+
+```yml
+- name: Scan Dockerfile
+  uses: nationalarchives/ds-docker-actions/.github/actions/scan-dockerfile@main
+  with:
+    image-id: my-application
+    image-tag: 0.1.0
+    dockerfile-path: .
+    wiz-project-id: ${{ inputs.wiz-project-id }}
+```
+
+### Scan a container
+
+```yml
+- name: Scan Dockerfile
+  uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
+  with:
+    image-id: my-application
+    image-tag: 0.1.0
+    wiz-project-id: ${{ inputs.wiz-project-id }}
 ```
