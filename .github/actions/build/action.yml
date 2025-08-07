@@ -24,11 +24,10 @@ inputs:
     required: true
     type: string
 
-env:
-  DISABLE_WIZ: true  # TODO: Remove this when Wiz is fixed
-
 runs:
   using: "composite"
+  env:
+    DISABLE_WIZ: true  # TODO: Remove this when Wiz is fixed
   steps:
     - uses: actions/checkout@v4
 
