@@ -24,6 +24,9 @@ inputs:
     required: true
     type: string
 
+env:
+  DISABLE_WIZ: true  # TODO: Remove this when Wiz is fixed
+
 runs:
   using: "composite"
   steps:
