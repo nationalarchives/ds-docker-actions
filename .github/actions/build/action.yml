@@ -67,7 +67,7 @@ runs:
 
     - name: Build and push image
       run: |
-        docker build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_NAME=${{ inputs.docker-image-name }}" --platform linux/amd64 --no-cache .
+        docker build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
         docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
       shell: bash
 
