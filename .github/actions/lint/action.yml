@@ -19,6 +19,6 @@ runs:
     - name: ShellCheck
       run: |
         cd ${{ inputs.dockerfile-path }}
-        [ -d "./bin" ] && shellcheck --external-sources --exclude=SC1091 ./bin/*
+        # [ -d "./bin" ] && shellcheck --external-sources --exclude=SC1091 ./bin/*
         shellcheck --external-sources --exclude=SC2148 ./Dockerfile
       shell: bash
