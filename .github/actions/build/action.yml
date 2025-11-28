@@ -55,7 +55,10 @@ runs:
       uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
       with:
         dockerfile-path: .
-        ignore-linting-rules: DL3045,DL3007
+        # DL3045 (https://github.com/hadolint/hadolint/wiki/DL3045) - WORKDIR is set on the base image but not in the application images
+        # DL3007 (https://github.com/hadolint/hadolint/wiki/DL3007) - We only use "latest" for our own images
+        # DL3059 (https://github.com/hadolint/hadolint/wiki/DL3059) - This is only a suggestion
+        ignore-linting-rules: DL3045,DL3007,DL3059
 
     - name: Scan Dockerfile
       uses: nationalarchives/ds-docker-actions/.github/actions/scan-dockerfile@main
