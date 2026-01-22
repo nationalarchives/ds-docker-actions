@@ -37,3 +37,8 @@ runs:
       if: ${{ env.DISABLE_WIZ != 'true' }}
       run: ./wizcli auth --id ${{ inputs.wiz-client-id }} --secret ${{ inputs.wiz-client-secret }}
       shell: bash
+
+    - name: Add Wiz CLI to .dockerignore
+      if: ${{ env.DISABLE_WIZ != 'true' }}
+      run: echo "wizcli" >> .dockerignore
+      shell: bash
