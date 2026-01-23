@@ -40,5 +40,7 @@ runs:
 
     - name: Add Wiz CLI to .dockerignore
       if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: echo "wizcli" >> .dockerignore
+      run: |
+        echo "" >> .dockerignore
+        echo "wizcli" >> .dockerignore
       shell: bash
