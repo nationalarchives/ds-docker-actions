@@ -68,17 +68,8 @@ runs:
         dockerfile-path: .
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
-    - name: Build and push image
-      run: |
-        docker build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
-        docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
-      shell: bash
-
-    - name: Tag latest
-      if: ${{ inputs.latest == 'true' }}
-      run: |
-        docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
-        docker push ${{ env.IMAGE_NAME }}:latest
+    - name: Build image
+      run: docker build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
       shell: bash
 
     - name: Scan container
@@ -87,3 +78,14 @@ runs:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
+
+    - name: Push image
+      run: docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+      shell: bash
+
+    - name: Tag latest
+      if: ${{ inputs.latest == 'true' }}
+      run: |
+        docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
+        docker push ${{ env.IMAGE_NAME }}:latest
+      shell: bash
