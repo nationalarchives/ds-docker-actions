@@ -1,4 +1,6 @@
-name: Build Docker image (v2)
+name: Build Docker image
+
+description: Build a Docker image, scan it with Wiz, and push it to GitHub Container Registry
 
 inputs:
   version:
@@ -69,7 +71,7 @@ runs:
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Build image
-      run: docker build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+      run: docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
       shell: bash
 
     - name: Scan container
@@ -79,13 +81,15 @@ runs:
         image-tag: ${{ inputs.version }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
-    - name: Push image
-      run: docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+    - name: Tag and push image
+      run: |
+        docker tag ${{ inputs.docker-image-name }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+        docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
       shell: bash
 
     - name: Tag latest
       if: ${{ inputs.latest == 'true' }}
       run: |
-        docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
+        docker tag ${{ inputs.docker-image-name }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
         docker push ${{ env.IMAGE_NAME }}:latest
       shell: bash
