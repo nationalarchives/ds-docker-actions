@@ -77,7 +77,7 @@ runs:
     - name: Scan container
       uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
       with:
-        image-id: ${{ env.IMAGE_NAME }}
+        image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
