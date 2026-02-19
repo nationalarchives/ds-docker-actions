@@ -75,7 +75,7 @@ runs:
       shell: bash
 
     - name: Scan container
-      uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@wiz-scan-before-push-docker
+      uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
       with:
         image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
