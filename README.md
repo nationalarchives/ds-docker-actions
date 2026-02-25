@@ -76,7 +76,7 @@ jobs:
 
 ```yml
 - name: Scan Dockerfile
-  uses: nationalarchives/ds-docker-actions/.github/actions/scan-dockerfile@main
+  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-dockerfile@main
   with:
     image-id: my-application
     image-tag: 0.1.0
@@ -88,7 +88,7 @@ jobs:
 
 ```yml
 - name: Scan Dockerfile
-  uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
+  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@main
   with:
     image-id: my-application
     image-tag: 0.1.0

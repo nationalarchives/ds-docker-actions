@@ -1,5 +1,7 @@
 name: Tag Docker image in Wiz
 
+description: Tag a Docker image in Wiz with a specified tag
+
 inputs:
   image-id:
     required: true
@@ -16,6 +18,5 @@ runs:
   steps:
     - name: Scan image with Wiz
       if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: |
-        ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --project ${{ inputs.wiz-project-id }}
+      run: ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --project ${{ inputs.wiz-project-id }}
       shell: bash

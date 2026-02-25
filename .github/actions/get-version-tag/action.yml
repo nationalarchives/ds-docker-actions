@@ -1,5 +1,7 @@
 name: Get version tag
 
+description: Get a version tag from the branch, tag or release that triggered the workflow, and format it for use in tagging Docker images
+
 outputs:
   version-tag:
     description: "Version tag"

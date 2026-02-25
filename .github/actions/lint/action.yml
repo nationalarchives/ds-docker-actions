@@ -1,5 +1,7 @@
 name: Lint Dockerfile
 
+description: Lint a Dockerfile using Hadolint and ShellCheck
+
 inputs:
   dockerfile-path:
     required: true

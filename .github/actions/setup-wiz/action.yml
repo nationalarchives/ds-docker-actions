@@ -1,5 +1,7 @@
 name: Set up Wiz
 
+description: Set up the Wiz CLI and authenticate with the Wiz API
+
 inputs:
   wiz-client-id:
     required: true

@@ -1,5 +1,7 @@
 name: Scan Docker image
 
+description: Scan a Docker image for vulnerabilities using Wiz
+
 inputs:
   image-id:
     required: true
