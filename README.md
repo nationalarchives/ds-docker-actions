@@ -92,5 +92,6 @@ jobs:
   with:
     image-id: my-application
     image-tag: 0.1.0
+    dockerfile-path: .
     wiz-project-id: ${{ inputs.wiz-project-id }}
 ```
