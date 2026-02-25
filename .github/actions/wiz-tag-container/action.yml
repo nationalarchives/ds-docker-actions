@@ -18,5 +18,7 @@ runs:
   steps:
     - name: Scan image with Wiz
       if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --project ${{ inputs.wiz-project-id }}
+      run: |
+        docker pull ${{ inputs.image-id }}:${{ inputs.image-tag }}
+        ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --project ${{ inputs.wiz-project-id }}
       shell: bash
