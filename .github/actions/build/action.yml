@@ -71,11 +71,14 @@ runs:
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Build image
-      run: docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+      run: |
+        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+        docker inspect ${{ inputs.docker-image-name }}:${{ inputs.version }}
+        docker images --digests
       shell: bash
 
     - name: Scan container
-      uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
+      uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@wiz-build-scan-refactor
       with:
         image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
@@ -93,3 +96,10 @@ runs:
         docker tag ${{ inputs.docker-image-name }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
         docker push ${{ env.IMAGE_NAME }}:latest
       shell: bash
+
+    - name: Tag container
+      uses: nationalarchives/ds-docker-actions/.github/actions/tag-container-wiz@wiz-build-scan-refactor
+      with:
+        image-id: ${{ inputs.docker-image-name }}
+        image-tag: ${{ inputs.version }}
+        wiz-project-id: ${{ inputs.wiz-project-id }}
