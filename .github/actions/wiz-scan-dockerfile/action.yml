@@ -12,7 +12,7 @@ inputs:
   wiz-project-id:
     required: true
     type: string
-  dockerfile-path:
+  dockerfile-directory:
     required: true
     type: string
 
@@ -21,5 +21,5 @@ runs:
   steps:
     - name: Scan DockerFile
       if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: ./wizcli iac scan --name ${{ inputs.image-id }}:${{ inputs.image-tag }} --path ${{ inputs.dockerfile-path }} --types Dockerfile --project ${{ inputs.wiz-project-id }}
+      run: ./wizcli iac scan --name ${{ inputs.image-id }}:${{ inputs.image-tag }} --path ${{ inputs.dockerfile-directory }} --types Dockerfile --project ${{ inputs.wiz-project-id }}
       shell: bash

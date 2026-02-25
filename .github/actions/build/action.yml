@@ -67,7 +67,7 @@ runs:
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
-        dockerfile-path: .
+        dockerfile-directory: .
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Build image
@@ -82,6 +82,7 @@ runs:
       with:
         image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
+        dockerfile-path: .
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Tag and push image

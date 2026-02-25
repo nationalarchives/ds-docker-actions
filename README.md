@@ -80,18 +80,18 @@ jobs:
   with:
     image-id: my-application
     image-tag: 0.1.0
-    dockerfile-path: .
+    dockerfile-directory: .
     wiz-project-id: ${{ inputs.wiz-project-id }}
 ```
 
 ### Scan a container
 
 ```yml
-- name: Scan Dockerfile
+- name: Scan container
   uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@main
   with:
     image-id: my-application
     image-tag: 0.1.0
-    dockerfile-path: .
+    dockerfile-path: ./Dockerfile
     wiz-project-id: ${{ inputs.wiz-project-id }}
 ```
