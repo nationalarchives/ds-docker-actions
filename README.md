@@ -2,7 +2,14 @@
 
 Build, lint and maintain Docker images with consistent labelling.
 
-## Simple example
+## Simple examples
+
+`actions/build` is a one-step action that:
+
+- Lints and scans your Dockerfile
+- Builds, scans and tags your Docker image
+- Uploads your image to GHCR (GitHub Container Repository)
+- Integrates with Wiz for reporting
 
 ```yml
 name: Build Docker image
@@ -26,12 +33,13 @@ jobs:
           latest: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
           docker-image-name: my-application
+          dockerfile-path: ./Dockerfile
           wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
           wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
           wiz-project-id: ${{ secrets.WIZ_PROJECT_ID }}
 ```
 
-## Build a Docker image with a generated version number
+### Build a Docker image with a generated version number
 
 ```yml
 - name: Create version tag
@@ -51,7 +59,18 @@ jobs:
     wiz-project-id: ${{ secrets.WIZ_PROJECT_ID }}
 ```
 
-## Lint a `Dockerfile`
+## Complex examples (bespoke build processes)
+
+If you need more granular steps than `actions/build`, you can build and scan Docker images yourself using the component actions.
+
+1. Lint Dockerfile: `actions/lint`
+1. Scan Dockerfile: `actions/wiz-scan-dockerfile`
+1. Build Docker image: [bespoke to your application]
+1. Scan Docker image: `actions/wiz-scan-container`
+1. Push Docker image: [bespoke to your application]
+1. Tag Docker image: `actions/wiz-tag-container`
+
+### Lint a `Dockerfile`
 
 ```yml
 - name: Lint Dockerfile
@@ -60,8 +79,6 @@ jobs:
     dockerfile-path: ./Dockerfile
     ignore-linting-rules: DL3045,DL3007
 ```
-
-## Working with Wiz
 
 ### Set up Wiz
 
@@ -93,6 +110,19 @@ jobs:
     image-id: my-application
     image-tag: 0.1.0
     dockerfile-path: ./Dockerfile
+    wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
+    wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
+    wiz-project-id: ${{ secrets.WIZ_PROJECT_DIGITALSERVICES }}
+```
+
+### Tag a container
+
+```yml
+- name: Scan container
+  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-tag-container@main
+  with:
+    image-id: my-application
+    image-tag: 0.1.0
     wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
     wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
     wiz-project-id: ${{ secrets.WIZ_PROJECT_DIGITALSERVICES }}
