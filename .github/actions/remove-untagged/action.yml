@@ -1,5 +1,7 @@
 name: Remove untagged Docker images
 
+description: Remove untagged Docker images from GitHub Packages
+
 inputs:
   docker-image-name:
     required: true

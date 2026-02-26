@@ -1,12 +1,6 @@
-name: Set up Wiz
+name: Install Wiz CLI
 
-inputs:
-  wiz-client-id:
-    required: true
-    type: string
-  wiz-client-secret:
-    required: true
-    type: string
+description: Install the Wiz CLI
 
 runs:
   using: "composite"
@@ -31,11 +25,6 @@ runs:
         echo "$(cat /tmp/wizcli-sha256) wizcli" | sha256sum --check
         chmod +x wizcli
         ./wizcli version
-      shell: bash
-
-    - name: Authenticate Wiz API
-      if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: ./wizcli auth --id ${{ inputs.wiz-client-id }} --secret ${{ inputs.wiz-client-secret }}
       shell: bash
 
     - name: Add Wiz CLI to .dockerignore

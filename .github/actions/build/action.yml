@@ -1,4 +1,6 @@
-name: Build Docker image (v2)
+name: Build Docker image
+
+description: Build a Docker image, scan it with Wiz, and push it to GitHub Container Registry
 
 inputs:
   version:
@@ -9,6 +11,9 @@ inputs:
     type: boolean
     default: false
   github-token:
+    required: true
+    type: string
+  dockerfile-path:
     required: true
     type: string
   docker-image-name:
@@ -37,11 +42,8 @@ runs:
       run: echo "${{ inputs.github-token }}" | docker login ghcr.io -u $ --password-stdin
       shell: bash
 
-    - name: Set up Wiz
-      uses: nationalarchives/ds-docker-actions/.github/actions/setup-wiz@main
-      with:
-        wiz-client-id: ${{ inputs.wiz-client-id }}
-        wiz-client-secret: ${{ inputs.wiz-client-secret }}
+    - name: Install Wiz CLI
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@wiz-build-scan-refactor
 
     - name: Set up Docker image name
       id: docker-image-name
@@ -52,38 +54,59 @@ runs:
       shell: bash
 
     - name: Lint Dockerfile
-      uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
+      uses: nationalarchives/ds-docker-actions/.github/actions/lint@wiz-build-scan-refactor
       with:
-        dockerfile-path: .
+        dockerfile-path: ${{ inputs.dockerfile-path }}
         # DL3045 (https://github.com/hadolint/hadolint/wiki/DL3045) - WORKDIR is set on the base image but not in the application images
         # DL3007 (https://github.com/hadolint/hadolint/wiki/DL3007) - We only use "latest" for our own images
         # DL3059 (https://github.com/hadolint/hadolint/wiki/DL3059) - This is only a suggestion
         ignore-linting-rules: DL3045,DL3007,DL3059
 
     - name: Scan Dockerfile
-      uses: nationalarchives/ds-docker-actions/.github/actions/scan-dockerfile@main
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-dockerfile@wiz-build-scan-refactor
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
-        dockerfile-path: .
+        dockerfile-path: ${{ inputs.dockerfile-path }}
+        wiz-client-id: ${{ inputs.wiz-client-id }}
+        wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
-    - name: Build and push image
+    - name: Build image
       run: |
-        docker build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+        docker inspect ${{ inputs.docker-image-name }}:${{ inputs.version }}
+        docker images --digests
+      shell: bash
+
+    - name: Scan container
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@wiz-build-scan-refactor
+      with:
+        image-id: ${{ inputs.docker-image-name }}
+        image-tag: ${{ inputs.version }}
+        dockerfile-path: ${{ inputs.dockerfile-path }}
+        wiz-client-id: ${{ inputs.wiz-client-id }}
+        wiz-client-secret: ${{ inputs.wiz-client-secret }}
+        wiz-project-id: ${{ inputs.wiz-project-id }}
+
+    - name: Tag and push image
+      run: |
+        docker tag ${{ inputs.docker-image-name }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:${{ inputs.version }}
         docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
       shell: bash
 
     - name: Tag latest
       if: ${{ inputs.latest == 'true' }}
       run: |
-        docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
+        docker tag ${{ inputs.docker-image-name }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
         docker push ${{ env.IMAGE_NAME }}:latest
       shell: bash
 
-    - name: Scan container
-      uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
+    - name: Tag container
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-tag-container@wiz-build-scan-refactor
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
+        wiz-client-id: ${{ inputs.wiz-client-id }}
+        wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}

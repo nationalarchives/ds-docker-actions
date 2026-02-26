@@ -56,41 +56,43 @@ jobs:
 - name: Lint Dockerfile
   uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
   with:
-    dockerfile-path: .
+    dockerfile-path: ./Dockerfile
     ignore-linting-rules: DL3045,DL3007
 ```
 
 ## Working with Wiz
 
-### Set up and configure Wiz
+### Set up Wiz
 
 ```yml
-- name: Set up Wiz
-  uses: nationalarchives/ds-docker-actions/.github/actions/setup-wiz@main
-  with:
-    wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
-    wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
+- name: Install the Wiz CLI
+  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@main
 ```
 
 ### Scan a `Dockerfile`
 
 ```yml
 - name: Scan Dockerfile
-  uses: nationalarchives/ds-docker-actions/.github/actions/scan-dockerfile@main
+  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-dockerfile@main
   with:
     image-id: my-application
     image-tag: 0.1.0
-    dockerfile-path: .
+    dockerfile-path: ./Dockerfile
+    wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
+    wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
     wiz-project-id: ${{ inputs.wiz-project-id }}
 ```
 
 ### Scan a container
 
 ```yml
-- name: Scan Dockerfile
-  uses: nationalarchives/ds-docker-actions/.github/actions/scan-container@main
+- name: Scan container
+  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@main
   with:
     image-id: my-application
     image-tag: 0.1.0
+    dockerfile-path: ./Dockerfile
+    wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
+    wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
     wiz-project-id: ${{ inputs.wiz-project-id }}
 ```
