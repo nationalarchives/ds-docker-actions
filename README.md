@@ -43,7 +43,7 @@ jobs:
 
 `actions/get-version-tag` will generate a simple and safe version tag based on your branch name or relelase/tag.
 
-When used on a `main` branch, it generates a [CalVer](https://calver.org/) version in the format `YY.0M.0D.MICRO` where `MICRO` is a continually-incrementing number based on the run number.
+When used on a `main` branch, it generates a [CalVer](https://calver.org/) version in the format `YY.0M.0D.MICRO` where `MICRO` is a continually-incrementing number based on the run number, for example `26.02.26.1586`.
 
 ```yml
 - name: Create version tag
