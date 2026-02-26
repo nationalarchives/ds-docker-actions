@@ -65,8 +65,8 @@ jobs:
 ### Set up Wiz
 
 ```yml
-- name: Set up Wiz
-  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-setup@main
+- name: Install the Wiz CLI
+  uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@main
 ```
 
 ### Scan a `Dockerfile`
