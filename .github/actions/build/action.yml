@@ -43,7 +43,7 @@ runs:
       shell: bash
 
     - name: Install Wiz CLI
-      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@wiz-build-scan-refactor
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@main
 
     - name: Set up Docker image name
       id: docker-image-name
@@ -54,7 +54,7 @@ runs:
       shell: bash
 
     - name: Lint Dockerfile
-      uses: nationalarchives/ds-docker-actions/.github/actions/lint@wiz-build-scan-refactor
+      uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
       with:
         dockerfile-path: ${{ inputs.dockerfile-path }}
         # DL3045 (https://github.com/hadolint/hadolint/wiki/DL3045) - WORKDIR is set on the base image but not in the application images
@@ -63,7 +63,7 @@ runs:
         ignore-linting-rules: DL3045,DL3007,DL3059
 
     - name: Scan Dockerfile
-      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-dockerfile@wiz-build-scan-refactor
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-dockerfile@main
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
@@ -80,7 +80,7 @@ runs:
       shell: bash
 
     - name: Scan container
-      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@wiz-build-scan-refactor
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@main
       with:
         image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
@@ -103,7 +103,7 @@ runs:
       shell: bash
 
     - name: Tag container
-      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-tag-container@wiz-build-scan-refactor
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-tag-container@main
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
