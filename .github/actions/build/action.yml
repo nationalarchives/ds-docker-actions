@@ -105,7 +105,7 @@ runs:
     - name: Tag container
       uses: nationalarchives/ds-docker-actions/.github/actions/wiz-tag-container@wiz-build-scan-refactor
       with:
-        image-id: ${{ inputs.docker-image-name }}
+        image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
         wiz-client-id: ${{ inputs.wiz-client-id }}
         wiz-client-secret: ${{ inputs.wiz-client-secret }}
