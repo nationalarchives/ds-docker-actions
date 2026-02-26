@@ -56,7 +56,7 @@ jobs:
 - name: Lint Dockerfile
   uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
   with:
-    dockerfile-path: .
+    dockerfile-path: ./Dockerfile
     ignore-linting-rules: DL3045,DL3007
 ```
 
@@ -77,7 +77,7 @@ jobs:
   with:
     image-id: my-application
     image-tag: 0.1.0
-    dockerfile-directory: .
+    dockerfile-path: ./Dockerfile
     wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
     wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
     wiz-project-id: ${{ inputs.wiz-project-id }}

@@ -18,7 +18,7 @@ inputs:
   wiz-project-id:
     required: true
     type: string
-  dockerfile-directory:
+  dockerfile-path:
     required: true
     type: string
 
@@ -27,5 +27,5 @@ runs:
   steps:
     - name: Scan DockerFile
       if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: ./wizcli scan dir ${{ inputs.dockerfile-directory }}/Dockerfile --types Dockerfile --name ${{ inputs.image-id }}:${{ inputs.image-tag }} --client-id ${{ inputs.wiz-client-id }} --client-secret ${{ inputs.wiz-client-secret }} --projects ${{ inputs.wiz-project-id }}
+      run: ./wizcli scan dir ${{ inputs.dockerfile-path }} --types Dockerfile --name ${{ inputs.image-id }}:${{ inputs.image-tag }} --client-id ${{ inputs.wiz-client-id }} --client-secret ${{ inputs.wiz-client-secret }} --projects ${{ inputs.wiz-project-id }}
       shell: bash

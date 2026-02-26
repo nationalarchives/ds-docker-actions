@@ -13,6 +13,9 @@ inputs:
   github-token:
     required: true
     type: string
+  dockerfile-path:
+    required: true
+    type: string
   docker-image-name:
     required: true
     type: string
@@ -53,7 +56,7 @@ runs:
     - name: Lint Dockerfile
       uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
       with:
-        dockerfile-path: .
+        dockerfile-path: ${{ inputs.dockerfile-path }}
         # DL3045 (https://github.com/hadolint/hadolint/wiki/DL3045) - WORKDIR is set on the base image but not in the application images
         # DL3007 (https://github.com/hadolint/hadolint/wiki/DL3007) - We only use "latest" for our own images
         # DL3059 (https://github.com/hadolint/hadolint/wiki/DL3059) - This is only a suggestion
@@ -64,7 +67,7 @@ runs:
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
-        dockerfile-directory: .
+        dockerfile-path: ${{ inputs.dockerfile-path }}
         wiz-client-id: ${{ inputs.wiz-client-id }}
         wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
@@ -81,7 +84,7 @@ runs:
       with:
         image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
-        dockerfile-path: .
+        dockerfile-path: ${{ inputs.dockerfile-path }}
         wiz-client-id: ${{ inputs.wiz-client-id }}
         wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}

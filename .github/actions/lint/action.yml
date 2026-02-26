@@ -15,12 +15,11 @@ runs:
   steps:
     - uses: hadolint/hadolint-action@v3.1.0
       with:
-        dockerfile: ${{ inputs.dockerfile-path }}/Dockerfile
+        dockerfile: ${{ inputs.dockerfile-path }}
         ignore: ${{ inputs.ignore-linting-rules }}
 
     - name: ShellCheck
       run: |
-        cd ${{ inputs.dockerfile-path }}
         # [ -d "./bin" ] && shellcheck --external-sources --exclude=SC1091 ./bin/*
-        shellcheck --external-sources --exclude=SC2148 ./Dockerfile
+        shellcheck --external-sources --exclude=SC2148 ${{ inputs.dockerfile-path }}
       shell: bash
