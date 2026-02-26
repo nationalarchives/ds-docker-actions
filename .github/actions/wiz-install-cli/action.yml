@@ -5,8 +5,7 @@ description: Install the Wiz CLI
 runs:
   using: "composite"
   steps:
-    - name: Download Wiz CLI
-      if: ${{ env.DISABLE_WIZ != 'true' }}
+    - name: Download, validate and install the Wiz CLI
       run: |
         curl -Lo wizcli https://downloads.wiz.io/v1/wizcli/latest/wizcli-linux-amd64
 
@@ -25,11 +24,4 @@ runs:
         echo "$(cat /tmp/wizcli-sha256) wizcli" | sha256sum --check
         chmod +x wizcli
         ./wizcli version
-      shell: bash
-
-    - name: Add Wiz CLI to .dockerignore
-      if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: |
-        echo "" >> .dockerignore
-        echo "wizcli" >> .dockerignore
       shell: bash

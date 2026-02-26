@@ -45,6 +45,12 @@ runs:
     - name: Install Wiz CLI
       uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@main
 
+    - name: Add Wiz CLI to .dockerignore
+      run: |
+        echo "" >> .dockerignore
+        echo "wizcli" >> .dockerignore
+      shell: bash
+
     - name: Set up Docker image name
       id: docker-image-name
       run: |
