@@ -25,6 +25,5 @@ runs:
     - name: Scan image with Wiz
       if: ${{ env.DISABLE_WIZ != 'true' }}
       run: |
-        docker pull ${{ inputs.image-id }}:${{ inputs.image-tag }}
         ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --client-id ${{ inputs.wiz-client-id }} --client-secret ${{ inputs.wiz-client-secret }} --projects ${{ inputs.wiz-project-id }}
       shell: bash
