@@ -40,7 +40,7 @@ runs:
       shell: bash
 
     - name: Install Wiz
-      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-setup@main
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@wiz-build-scan-refactor
 
     - name: Set up Docker image name
       id: docker-image-name
@@ -60,7 +60,7 @@ runs:
         ignore-linting-rules: DL3045,DL3007,DL3059
 
     - name: Scan Dockerfile
-      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-dockerfile@main
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-dockerfile@wiz-build-scan-refactor
       with:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
