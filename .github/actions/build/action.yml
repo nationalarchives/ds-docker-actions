@@ -39,11 +39,8 @@ runs:
       run: echo "${{ inputs.github-token }}" | docker login ghcr.io -u $ --password-stdin
       shell: bash
 
-    - name: Set up Wiz
-      uses: nationalarchives/ds-docker-actions/.github/actions/setup-wiz@main
-      with:
-        wiz-client-id: ${{ inputs.wiz-client-id }}
-        wiz-client-secret: ${{ inputs.wiz-client-secret }}
+    - name: Install Wiz
+      uses: nationalarchives/ds-docker-actions/.github/actions/wiz-setup@main
 
     - name: Set up Docker image name
       id: docker-image-name
@@ -68,6 +65,8 @@ runs:
         image-id: ${{ env.IMAGE_NAME }}
         image-tag: ${{ inputs.version }}
         dockerfile-directory: .
+        wiz-client-id: ${{ inputs.wiz-client-id }}
+        wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Build image

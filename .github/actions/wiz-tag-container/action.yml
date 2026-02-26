@@ -9,6 +9,12 @@ inputs:
   image-tag:
     required: true
     type: string
+  wiz-client-id:
+    required: true
+    type: string
+  wiz-client-secret:
+    required: true
+    type: string
   wiz-project-id:
     required: true
     type: string
@@ -20,5 +26,5 @@ runs:
       if: ${{ env.DISABLE_WIZ != 'true' }}
       run: |
         docker pull ${{ inputs.image-id }}:${{ inputs.image-tag }}
-        ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --project ${{ inputs.wiz-project-id }}
+        ./wizcli docker tag --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --client-id ${{ inputs.wiz-client-id }} --client-secret ${{ inputs.wiz-client-secret }} --projects ${{ inputs.wiz-project-id }}
       shell: bash

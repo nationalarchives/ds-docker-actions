@@ -9,6 +9,12 @@ inputs:
   image-tag:
     required: true
     type: string
+  wiz-client-id:
+    required: true
+    type: string
+  wiz-client-secret:
+    required: true
+    type: string
   wiz-project-id:
     required: true
     type: string
@@ -34,5 +40,5 @@ runs:
 
     - name: Scan image with Wiz
       if: ${{ env.DISABLE_WIZ != 'true' }}
-      run: ./wizcli docker scan --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --project ${{ inputs.wiz-project-id }} --dockerfile ${{ inputs.dockerfile-path }}
+      run: ./wizcli docker scan --image ${{ inputs.image-id }}:${{ inputs.image-tag }} --dockerfile ${{ inputs.dockerfile-path }} --client-id ${{ inputs.wiz-client-id }} --client-secret ${{ inputs.wiz-client-secret }} --projects ${{ inputs.wiz-project-id }}
       shell: bash
