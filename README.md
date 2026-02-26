@@ -45,6 +45,7 @@ jobs:
     latest: ${{ github.ref == 'refs/heads/main' }}
     github-token: ${{ secrets.GITHUB_TOKEN }}
     docker-image-name: my-application
+    dockerfile-path: ./Dockerfile
     wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
     wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
     wiz-project-id: ${{ secrets.WIZ_PROJECT_ID }}
@@ -80,7 +81,7 @@ jobs:
     dockerfile-path: ./Dockerfile
     wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
     wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
-    wiz-project-id: ${{ inputs.wiz-project-id }}
+    wiz-project-id: ${{ secrets.WIZ_PROJECT_DIGITALSERVICES }}
 ```
 
 ### Scan a container
@@ -94,5 +95,5 @@ jobs:
     dockerfile-path: ./Dockerfile
     wiz-client-id: ${{ secrets.WIZ_CLIENT_ID }}
     wiz-client-secret: ${{ secrets.WIZ_CLIENT_SECRET }}
-    wiz-project-id: ${{ inputs.wiz-project-id }}
+    wiz-project-id: ${{ secrets.WIZ_PROJECT_DIGITALSERVICES }}
 ```
