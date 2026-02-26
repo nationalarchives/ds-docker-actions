@@ -82,6 +82,8 @@ runs:
         image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
         dockerfile-path: .
+        wiz-client-id: ${{ inputs.wiz-client-id }}
+        wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Tag and push image
@@ -102,4 +104,6 @@ runs:
       with:
         image-id: ${{ inputs.docker-image-name }}
         image-tag: ${{ inputs.version }}
+        wiz-client-id: ${{ inputs.wiz-client-id }}
+        wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
