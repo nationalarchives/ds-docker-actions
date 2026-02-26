@@ -54,7 +54,7 @@ runs:
       shell: bash
 
     - name: Lint Dockerfile
-      uses: nationalarchives/ds-docker-actions/.github/actions/lint@main
+      uses: nationalarchives/ds-docker-actions/.github/actions/lint@wiz-build-scan-refactor
       with:
         dockerfile-path: ${{ inputs.dockerfile-path }}
         # DL3045 (https://github.com/hadolint/hadolint/wiki/DL3045) - WORKDIR is set on the base image but not in the application images
