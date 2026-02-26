@@ -39,7 +39,7 @@ runs:
       run: echo "${{ inputs.github-token }}" | docker login ghcr.io -u $ --password-stdin
       shell: bash
 
-    - name: Install Wiz
+    - name: Install Wiz CLI
       uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@wiz-build-scan-refactor
 
     - name: Set up Docker image name
