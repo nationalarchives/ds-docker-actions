@@ -13,16 +13,16 @@ runs:
     - name: Get tag from branch, tag or release
       id: version-tag
       run: |
-        echo "github.ref:                   ${{ github.ref }}"
-        echo "github.ref_name:              ${{ github.ref_name }}"
-        echo "github.event.ref:             ${{ github.event.ref }}"
+        # echo "github.ref:                   ${{ github.ref }}"
+        # echo "github.ref_name:              ${{ github.ref_name }}"
+        # echo "github.event.ref:             ${{ github.event.ref }}"
 
         VERSION=$(echo "${{ github.ref_name }}" | sed -e 's,/,-,g')
-        echo "Basic version:                $VERSION"
+        # echo "Basic version:                $VERSION"
 
         # Strip "v" prefix from tag name
         [[ "${{ github.ref_type }}" == "tag" ]] && VERSION=$(echo "$VERSION" | sed -e 's/^v//')
-        echo "Tag version without v prefix: $VERSION"
+        # echo "Tag version without v prefix: $VERSION"
 
         CALVER=$(date +%y.%m.%d).${{ github.run_number }}
         [ "$VERSION" == "main" ] && VERSION=$CALVER
