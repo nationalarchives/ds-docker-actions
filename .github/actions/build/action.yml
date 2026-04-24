@@ -105,7 +105,10 @@ runs:
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
     - name: Push image
-      run: docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+      run: |
+        docker inspect ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+        docker images --digests
+        docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
       shell: bash
 
     - name: Tag and push latest image
