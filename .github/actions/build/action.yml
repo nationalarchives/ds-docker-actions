@@ -45,6 +45,12 @@ runs:
     - name: Install Wiz CLI
       uses: nationalarchives/ds-docker-actions/.github/actions/wiz-install-cli@main
 
+    # - name: Set up QEMU
+    #   uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4.0.0
+
+    # - name: Set up Docker Buildx
+    #   uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+
     - name: Add Wiz CLI to .dockerignore
       run: |
         echo "" >> .dockerignore
@@ -80,7 +86,7 @@ runs:
 
     - name: Build image
       run: |
-        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64,linux/arm64 --no-cache .
         docker inspect ${{ inputs.docker-image-name }}:${{ inputs.version }}
         docker images --digests
       shell: bash
