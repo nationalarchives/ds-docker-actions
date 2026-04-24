@@ -86,7 +86,7 @@ runs:
 
     - name: Build image
       run: |
-        docker build --tag ${{ inputs.docker-image-name }}:local --build-arg "BUILD_VERSION=local" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --no-cache .
+        docker build --tag ${{ inputs.docker-image-name }}:local --build-arg "BUILD_VERSION=local" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --no-cache --load .
         docker inspect ${{ inputs.docker-image-name }}:local
         docker images --digests
       shell: bash
@@ -104,14 +104,15 @@ runs:
     - name: Build, tag and push multi-architecture images
       run: |
         docker buildx build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64,linux/arm64 --no-cache --push .
-        docker inspect ${{ env.IMAGE_NAME }}:${{ inputs.version }}
-        docker images --digests
+        # docker inspect ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+        # docker images --digests
       shell: bash
 
     - name: Tag latest
       if: ${{ inputs.latest == 'true' }}
       run: |
-        docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
+        docker buildx imagetools create -t ${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+        # docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
         docker push ${{ env.IMAGE_NAME }}:latest
       shell: bash
 
