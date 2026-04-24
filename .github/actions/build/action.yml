@@ -86,9 +86,8 @@ runs:
 
     - name: Build image
       run: |
-        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
-        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/arm64 --no-cache .
-        docker inspect ${{ inputs.docker-image-name }}:${{ inputs.version }}
+        docker build --tag ${{ inputs.docker-image-name }}:local --build-arg "BUILD_VERSION=local" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --no-cache .
+        docker inspect ${{ inputs.docker-image-name }}:local
         docker images --digests
       shell: bash
 
@@ -96,22 +95,23 @@ runs:
       uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@main
       with:
         image-id: ${{ inputs.docker-image-name }}
-        image-tag: ${{ inputs.version }}
+        image-tag: local
         dockerfile-path: ${{ inputs.dockerfile-path }}
         wiz-client-id: ${{ inputs.wiz-client-id }}
         wiz-client-secret: ${{ inputs.wiz-client-secret }}
         wiz-project-id: ${{ inputs.wiz-project-id }}
 
-    - name: Tag and push image
+    - name: Build, tag and push multi-architecture images
       run: |
-        docker tag ${{ inputs.docker-image-name }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:${{ inputs.version }}
-        docker push ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+        docker buildx build --tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64,linux/arm64 --no-cache --push .
+        docker inspect ${{ env.IMAGE_NAME }}:${{ inputs.version }}
+        docker images --digests
       shell: bash
 
     - name: Tag latest
       if: ${{ inputs.latest == 'true' }}
       run: |
-        docker tag ${{ inputs.docker-image-name }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
+        docker tag ${{ env.IMAGE_NAME }}:${{ inputs.version }} ${{ env.IMAGE_NAME }}:latest
         docker push ${{ env.IMAGE_NAME }}:latest
       shell: bash
 
