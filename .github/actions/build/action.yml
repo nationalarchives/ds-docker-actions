@@ -98,7 +98,7 @@ runs:
       uses: nationalarchives/ds-docker-actions/.github/actions/wiz-scan-container@main
       with:
         image-id: ${{ env.IMAGE_NAME }}
-        image-tag: local
+        image-tag: ${{ inputs.version }}
         dockerfile-path: ${{ inputs.dockerfile-path }}
         wiz-client-id: ${{ inputs.wiz-client-id }}
         wiz-client-secret: ${{ inputs.wiz-client-secret }}
