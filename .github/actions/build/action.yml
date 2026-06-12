@@ -28,6 +28,13 @@ inputs:
   wiz-project-id:
     required: true
     type: string
+  platform:
+    required: false
+    type: choice
+    options:
+      - linux/amd64
+      - linux/arm64
+    default: linux/amd64
 
 runs:
   using: "composite"
@@ -82,7 +89,7 @@ runs:
 
     - name: Build image
       run: |
-        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform ${{ inputs.platform }} --no-cache .
         docker inspect ${{ inputs.docker-image-name }}:${{ inputs.version }}
         docker images --digests
       shell: bash
