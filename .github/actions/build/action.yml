@@ -82,7 +82,7 @@ runs:
 
     - name: Build image
       run: |
-        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --no-cache .
+        docker build --tag ${{ inputs.docker-image-name }}:${{ inputs.version }} --build-arg "BUILD_VERSION=${{ inputs.version }}" --build-arg "CONTAINER_IMAGE=${{ env.IMAGE_NAME }}" --platform linux/amd64 --progress=plain --no-cache .
         docker inspect ${{ inputs.docker-image-name }}:${{ inputs.version }}
         docker images --digests
       shell: bash
