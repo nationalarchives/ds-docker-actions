@@ -13,7 +13,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: hadolint/hadolint-action@v3.1.0
+    - uses: hadolint/hadolint-action@06be81baf89a55ffd0e24b8f04a4185738dd3387
       with:
         dockerfile: ${{ inputs.dockerfile-path }}
         ignore: ${{ inputs.ignore-linting-rules }}
